@@ -6,14 +6,11 @@ const leadSchema = new mongoose.Schema({
   propertyType: String,
   location: String,
   budget: Number,
-  loanNeeded: String,
+  loanNeeded: Boolean,
   qualified: Boolean,
   transcript: String,
   botReply: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("Lead", leadSchema);
+export default mongoose.model('Lead', leadSchema);
