@@ -1,5 +1,3 @@
-// src/pages/Home.jsx
-
 import React, { useEffect, useState } from "react";
 import LeadCard from "../components/LeadCard";
 import { fetchLeads } from "../api";
@@ -8,8 +6,28 @@ export default function Home() {
   const [leads, setLeads] = useState([]);
   const [filter, setFilter] = useState("all");
 
+  const TEST_MODE = true; // 👈 set this to `false` for production
+
   useEffect(() => {
-    fetchLeads().then(setLeads);
+    if (TEST_MODE) {
+      // Dummy/test lead card for dev
+      setLeads([
+        {
+          _id: "test123",
+          name: "John Doe",
+          phone: "+91 9876543210",
+          email: "john@example.com",
+          interestedIn: "2BHK Apartment",
+          qualified: true,
+          budget: "50L",
+          location: "Mumbai",
+          timeline: "1 month",
+          source: "Voice Bot",
+        },
+      ]);
+    } else {
+      fetchLeads().then(setLeads).catch(console.error);
+    }
   }, []);
 
   const filteredLeads = leads.filter((lead) => {
@@ -20,7 +38,7 @@ export default function Home() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">🧠 Real Estate Leads</h1>
+      <h1 className="text-2xl font-bold mb-4"> Real Estate Leads</h1>
 
       <div className="mb-4 flex gap-2">
         <button onClick={() => setFilter("all")} className={`px-3 py-1 rounded ${filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200"}`}>All</button>

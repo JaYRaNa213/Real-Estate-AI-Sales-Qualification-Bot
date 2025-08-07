@@ -1,11 +1,11 @@
 {
   "name": "real-estate-bot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.jsx",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node index.jsx",
+    "dev": "nodemon index.jsx"
   },
   "keywords": [],
   "author": "",

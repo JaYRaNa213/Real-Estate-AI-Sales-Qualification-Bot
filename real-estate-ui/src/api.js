@@ -1,6 +1,6 @@
 // src/api.js
 
-const API_BASE = "http://localhost:3000"; // change to your backend URL
+const API_BASE = "http://localhost:5000"; // change to your backend URL
 
 export async function fetchLeads() {
   try {
