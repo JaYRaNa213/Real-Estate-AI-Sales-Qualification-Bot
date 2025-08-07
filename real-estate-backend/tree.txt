@@ -1,0 +1,23 @@
+📁 real-estate-bot
+├── .env
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── README.md
+├── src
+│   ├── app.js
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   └── leads.controller.js
+│   ├── models
+│   │   └── Lead.js
+│   ├── routes
+│   │   └── leads.routes.js
+│   ├── server.js
+│   ├── services
+│   │   └── lead.service.js
+│   └── utils
+│       └── logger.js
+├── tree.js
+└── tree.txt
