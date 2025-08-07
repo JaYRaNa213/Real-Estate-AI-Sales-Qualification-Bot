@@ -1,23 +1,92 @@
 import { Lead } from '../models/Lead.js';
-import { createLeadService } from '../services/lead.service.js';
+import {logger} from '../utils/logger.js';
 
+/**
+ * Create a new lead (from n8n or frontend)
+ * @route POST /api/leads
+ */
 export const createLead = async (req, res) => {
   try {
-    const leadData = req.body;
-    const newLead = await createLeadService(leadData);
-    res.status(201).json({ success: true, lead: newLead });
+    const {
+      name,
+      phone,
+      email,
+      location,
+      budget,
+      intent,
+      loanNeeded,
+      qualified,
+      sessionId,
+    } = req.body;
+
+    const lead = new Lead({
+      name,
+      phone,
+      email,
+      location,
+      budget,
+      intent,
+      loanNeeded,
+      qualified,
+      sessionId,
+    });
+
+    await lead.save();
+
+    logger.info('New lead saved:', lead);
+    res.status(201).json({ message: 'Lead created successfully', lead });
   } catch (error) {
-    console.error('Create lead failed:', error);
-    res.status(500).json({ success: false, message: 'Failed to create lead' });
+    logger.error('Error creating lead:', error.message);
+    res.status(500).json({ error: 'Failed to create lead' });
   }
 };
 
-export const getLeads = async (req, res) => {
+/**
+ * Get all leads
+ * @route GET /api/leads
+ */
+export const getAllLeads = async (req, res) => {
   try {
     const leads = await Lead.find().sort({ createdAt: -1 });
-    res.status(200).json({ success: true, leads });
+    res.status(200).json(leads);
   } catch (error) {
-    console.error('Get leads failed:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch leads' });
+    logger.error('Error fetching leads:', error.message);
+    res.status(500).json({ error: 'Failed to fetch leads' });
+  }
+};
+
+/**
+ * Get leads by sessionId
+ * @route GET /api/leads/session/:sessionId
+ */
+export const getLeadsBySession = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const leads = await Lead.find({ sessionId });
+    res.status(200).json(leads);
+  } catch (error) {
+    logger.error('Error fetching leads by sessionId:', error.message);
+    res.status(500).json({ error: 'Failed to fetch session leads' });
+  }
+};
+
+/**
+ * Delete a lead by ID
+ * @route DELETE /api/leads/:id
+ */
+export const deleteLead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const lead = await Lead.findByIdAndDelete(id);
+
+    if (!lead) {
+      return res.status(404).json({ message: 'Lead not found' });
+    }
+
+    logger.info(`Lead deleted: ${id}`);
+    res.status(200).json({ message: 'Lead deleted successfully' });
+  } catch (error) {
+    logger.error('Error deleting lead:', error.message);
+    res.status(500).json({ error: 'Failed to delete lead' });
   }
 };
