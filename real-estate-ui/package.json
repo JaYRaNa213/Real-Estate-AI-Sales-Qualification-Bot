@@ -9,6 +9,7 @@
     "css:build": "tailwindcss -i ./src/tailwind.css -o ./src/index.css --minify"
   },
   "dependencies": {
+    "axios": "^1.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
