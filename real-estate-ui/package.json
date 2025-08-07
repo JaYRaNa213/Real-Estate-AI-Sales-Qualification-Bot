@@ -2,10 +2,11 @@
   "name": "real-estate-ui",
   "version": "1.0.0",
   "scripts": {
-    "build:css": "npx tailwindcss -i ./src/tailwind.css -o ./src/index.css --watch",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "css:watch": "tailwindcss -i ./src/tailwind.css -o ./src/index.css --watch",
+    "css:build": "tailwindcss -i ./src/tailwind.css -o ./src/index.css --minify"
   },
   "dependencies": {
     "react": "^18.2.0",
