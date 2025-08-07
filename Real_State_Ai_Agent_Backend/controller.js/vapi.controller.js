@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+import OpenAI from 'openai/index.mjs';
 import Lead from '../models/lead.model.js';
 import axios from 'axios';
 import dotenv from 'dotenv';
