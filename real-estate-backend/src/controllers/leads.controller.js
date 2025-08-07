@@ -7,39 +7,37 @@ import {logger} from '../utils/logger.js';
  */
 export const createLead = async (req, res) => {
   try {
-    const {
-      name,
-      phone,
-      email,
-      location,
-      budget,
-      intent,
-      loanNeeded,
-      qualified,
-      sessionId,
-    } = req.body;
+    let { name, location, budget, loanNeeded, sessionId, qualified,inte } = req.body;
 
-    const lead = new Lead({
-      name,
-      phone,
-      email,
-      location,
-      budget,
-      intent,
-      loanNeeded,
-      qualified,
-      sessionId,
-    });
+    if (!location || !budget || !sessionId) {
+      return res.status(400).json({ message: 'location, budget, and sessionId are required.' });
+    }
 
-    await lead.save();
+    // 🔁 Parse budget to Number if it's a string
+    // budget = Number(budget);
 
-    logger.info('New lead saved:', lead);
-    res.status(201).json({ message: 'Lead created successfully', lead });
+    // // ✅ If intent not provided, generate it
+    // if (!intent || intent === "") {
+    //   if (budget > 4000000) {
+    //     intent = "buying";
+    //   } else if (budget > 2000000) {
+    //     intent = "browsing";
+    //   } else {
+    //     intent = "low budget";
+    //   }
+    // }
+
+    const newLead = new Lead({ name, location, budget, loanNeeded, sessionId, qualified });
+    await newLead.save();
+
+    res.status(201).json({ message: 'Lead created successfully.', lead: newLead });
   } catch (error) {
-    logger.error('Error creating lead:', error.message);
-    res.status(500).json({ error: 'Failed to create lead' });
+    console.error('Error creating lead:', error);
+    res.status(500).json({ message: 'Server error.' });
   }
 };
+
+
 
 /**
  * Get all leads
@@ -88,5 +86,30 @@ export const deleteLead = async (req, res) => {
   } catch (error) {
     logger.error('Error deleting lead:', error.message);
     res.status(500).json({ error: 'Failed to delete lead' });
+  }
+};
+
+
+export const vapiWebhook = async (req, res) => {
+  try {
+    const { name, phone, email, budget, location, interestedIn, timeline, source } = req.body;
+
+    const lead = new Lead({
+      name,
+      phone,
+      email,
+      budget,
+      location,
+      interestedIn,
+      timeline,
+      source,
+      qualified: true // or apply logic later
+    });
+
+    await lead.save();
+    res.status(200).json({ message: "Lead saved from Vapi." });
+  } catch (error) {
+    console.error("Vapi Webhook Error:", error);
+    res.status(500).json({ message: "Failed to save lead." });
   }
 };
