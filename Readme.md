@@ -1,223 +1,189 @@
-# 🏠 Real Estate AI Qualification Bot
+# 🏡 Real Estate AI Sales Qualification Bot 🤖
 
-This is a real estate lead qualification bot that uses:
-- ✅ [OpenAI GPT-4](https://openai.com)
-- ✅ [Vapi](https://www.vapi.ai/) for voice interaction
-- ✅ [n8n](https://n8n.io) for workflow automation
-- ✅ [MongoDB](https://www.mongodb.com) to store leads
-- ✅ [Ngrok](https://ngrok.com) to expose your local n8n endpoint
+A voice-based AI assistant that qualifies real estate leads automatically through dynamic conversations, powered by Vapi, OpenAI, and n8n. Designed for agents, property consultants, and lead generation platforms.
 
 ---
 
-## 📌 Features
+## 📌 Problem Statement
 
-- ✅ Voice-powered conversation flow using Vapi
-- ✅ OpenAI GPT-4 collects and parses user responses
-- ✅ Qualified leads automatically saved to MongoDB
-- ✅ Qualified leads sent to n8n webhook for automation
-- ✅ Workflow supports both qualified and unqualified paths
-- ✅ JSON webhook integration tested via Postman
+**Real Estate agents** spend a lot of time answering repetitive qualification questions from potential buyers or tenants (budget, location, property type, etc). This causes inefficiency and lead leakage.
 
----
+### Objective:
+Automate the **sales qualification process** using an AI voice agent that:
 
-## 🛠️ Tech Stack
-
-| Layer         | Technology                |
-|---------------|---------------------------|
-| AI Assistant  | OpenAI GPT-4              |
-| Voice         | Vapi                      |
-| Backend       | Node.js + Express         |
-| Database      | MongoDB (Mongoose)        |
-| Automation    | n8n                       |
-| Tunneling     | Ngrok                     |
+- Engages leads via phone
+- Asks qualifying questions (budget, type, location)
+- Translates spoken text into structured data
+- Saves lead to database or forwards to CRM
+- Qualifies or disqualifies leads intelligently
 
 ---
 
-## 📂 Project Structure
+## 🚀 Solution Overview
 
-real-estate-bot/
-├── index.js
-├── .env
-├── package.json
-├── models/
-│ └── lead.model.js
-├── webhooks/
-│ └── vapi.js
-└── testwebhook.js
+An intelligent AI voice assistant built with:
 
-yaml
-Copy
-Edit
+- **Vapi** for real-time voice interaction
+- **OpenAI** for dynamic NLP-based responses
+- **n8n** to automate logic, parsing, and lead handling
+- **MongoDB** to store qualified leads
+- **ngrok** to expose local webhook for testing
+
+🎥 [**Demo Video (screen recording)**](#) *(Add your link here)*
 
 ---
 
-## ⚙️ .env Configuration
+## 🧠 Features
 
-Create a `.env` file in the root folder:
+- Conversational AI (via phone)
+- Budget parsing ("50 lakhs" → 5000000)
+- Auto-qualification (`qualified: true/false`)
+- Lead data saved to MongoDB
+- Easily customizable flow with n8n
 
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/real-estate-bot
-OPENAI_API_KEY=your-openai-key
-N8N_WEBHOOK=https://your-ngrok-url.ngrok-free.app/webhook/qualified-lead
-🚀 Installation & Run
-1. Clone the repo
-bash
-Copy
-Edit
-git clone https://github.com/yourname/real-estate-bot.git
-cd real-estate-bot
-2. Install dependencies
-bash
-Copy
-Edit
-npm install
-3. Start the server
-bash
-Copy
-Edit
-node index.js
-💬 Bot Dialog Flow
-The assistant will ask:
+---
 
-What kind of property are you looking for?
+## 🧱 Tech Stack Used
 
-What is your preferred location?
+| Tool         | Purpose                      |
+|--------------|------------------------------|
+| **Vapi**     | AI Voice Interface (Call)    |
+| **OpenAI**   | LLM logic & memory            |
+| **n8n**      | Workflow Automation + Webhook|
+| **MongoDB**  | Lead storage backend         |
+| **ngrok**    | Localhost tunnel (webhook)   |
 
-What is your budget?
+---
 
-Do you need loan assistance?
+## ⚙️ How It Works (Architecture)
 
-The bot then submits:
+```mermaid
+graph TD
+A[Vapi Voice Call] --> B{OpenAI logic}
+B --> C[n8n Webhook (POST)]
+C --> D[n8n Function Node]
+D --> E[Budget Parsing + Qualification]
+E --> F[Save to MongoDB]
+E --> G[Send to n8n Response Node]
+🔁 Full Workflow Steps (n8n)
+Webhook Node
 
-json
-Copy
-Edit
-{
-  "location": "Delhi",
-  "budget": 8000000,
-  "loanNeeded": true,
-  "sessionId": "abc123"
-}
-To this webhook:
+Receives payload from Vapi/agent
 
-nginx
-Copy
-Edit
-POST https://<your-ngrok-url>.ngrok-free.app/webhook/qualified-lead
-🧠 GPT Logic
-Your vapi.js uses GPT-4 to parse and structure leads. Example:
+Contains budget, location, propertyType, etc.
+
+Function Node (e.g., Budget Parser)
 
 js
 Copy
 Edit
-const gptResponse = await openai.chat.completions.create({
-  model: 'gpt-4',
-  messages: [
-    { role: 'system', content: `You are a real estate AI assistant...` },
-    { role: 'user', content: transcript }
-  ]
-});
-🔗 n8n Workflow Setup
-Step 1: Create a new Workflow
-Add a Webhook Trigger Node
+const rawBudget = $json.budget;
 
-Method: POST
+function textToNumber(text) {
+  if (!text) return 0;
+  text = text.toLowerCase();
+  if (text.includes("lakh")) {
+    const numberPart = parseFloat(text.replace(/[^\d\.]/g, ''));
+    return numberPart * 100000;
+  }
+  return parseFloat(text);
+}
 
-Path: qualified-lead
+return {
+  json: {
+    ...$json,
+    budget: textToNumber(rawBudget),
+  }
+}
+Qualification Logic
 
-Respond: Using Respond to Webhook Node
+If budget >= 2500000 and location exists, mark qualified = true.
 
-Enable Raw Body
+MongoDB Node
 
-Add MongoDB node (optional)
+Collection: leads
 
-Add IF node to check: {{$json["qualified"]}} === true
+Stores the structured data including qualification result.
 
-Add automation nodes (email, CRM, etc.)
-
-Step 2: Activate the workflow
-Click Activate (top right). You’ll now see:
-
-csharp
-Copy
-Edit
-✅ Workflow is in production
-Step 3: Start ngrok tunnel
-bash
-Copy
-Edit
-ngrok http 5678
-Copy the https://xxxx.ngrok-free.app URL and update your .env and Vapi tool.
-
-📮 Postman Test (Optional)
-Method: POST
-URL: https://your-ngrok.ngrok-free.app/webhook/qualified-lead
-Header: Content-Type: application/json
-Body:
+Response Node
 
 json
 Copy
 Edit
 {
-  "location": "Mumbai",
-  "budget": 9000000,
-  "loanNeeded": true,
-  "sessionId": "test-123"
+  "status": "Lead saved!",
+  "qualified": {{ $json["qualified"] }}
 }
-🛜 Tool Setup in Vapi
-Field	Value
-Name	Real_state_tool
-Description	Sends qualified leads to webhook
-URL	https://xxxx.ngrok-free.app/webhook/qualified-lead
-Headers	Content-Type: application/json
-Params	budget, location, loanNeeded, sessionId
-Message	Got it! I'm submitting your details.
+📦 How to Run Locally
+1. Clone Repository
+bash
+Copy
+Edit
+git clone https://github.com/your-username/real-estate-ai-bot.git
+cd real-estate-ai-bot
+2. Set up n8n
+bash
+Copy
+Edit
+npm install -g n8n
+n8n start
+3. Use ngrok to Expose Webhook
+bash
+Copy
+Edit
+ngrok http 5678
+# Copy the HTTPS webhook URL to use in Vapi
+4. Create Workflow in n8n
+Webhook ➝ Function ➝ MongoDB ➝ Response
 
-🧪 Test Flow
-Speak with the bot using Vapi
+Ensure MongoDB is running (mongodb://localhost:27017)
 
-Bot collects answers
+DB Name: realestate_bot, Collection: leads
 
-Sends JSON to webhook
+🎥 Demo Video
+👉 Add a screen-recorded video showing:
 
-MongoDB stores lead
+Vapi call in action
 
-n8n workflow runs (IF + Response + Any extra logic)
+Live qualification
 
-You see execution success in n8n
+MongoDB showing saved lead
 
-🐛 Troubleshooting
-Problem	Fix
-❌ Webhook not triggering	Ensure Webhook Trigger Node is present and workflow is active
-❌ Invalid JSON in n8n Respond node	Use valid JSON and Expression Mode like:
-{"qualified": {{$json["qualified"]}}}
-❌ Ngrok expired URL	Restart ngrok and update .env and Vapi config
-❌ Vapi says HTTPS required	Use the https ngrok URL
-❌ Arrows not green in n8n	Only green if executed while editor is open in test mode
+No faces or personal info
 
-📦 Future Enhancements
-🧑‍💼 CRM integrations (HubSpot, Zoho)
+📎 Add YouTube or Google Drive link here.
 
-📩 Email/SMS follow-up using Twilio
+📄 Submission Checklist
+✅ Working AI prototype with screen-recorded video
 
-📊 Lead scoring + analytics dashboard
+✅ Source code (n8n export + backend if any)
 
-🔐 Secure OAuth access for admin
+✅ Documentation (this file or PDF)
 
-🙌 Credits
-OpenAI
+✅ Uses at least 2 tools: Vapi + n8n + OpenAI
 
-Vapi
+🏆 Hackathon Info
+Hackathon: Swafinix AI Hackathon 2025
 
-n8n
+Category: Real Estate – AI Sales Qualification Bot
 
-MongoDB
+Submission Deadline: 10 Aug 2025, 01:21 AM IST
 
-Ngrok
+Status: ✅ Working Prototype Complete
 
-📝 License
-This project is licensed under the MIT License.
+✨ Future Improvements
+Integrate CRM (e.g., HubSpot, Zoho)
+
+Connect WhatsApp/SMS follow-ups
+
+Dashboard for lead insights
+
+Multilingual agent support
+
+📧 Contact
+Jay Prakash Rana
+Email: jayrana0909@gmail.com
+GitHub: [your-handle]
 
 yaml
 Copy
@@ -225,6 +191,69 @@ Edit
 
 ---
 
-### ✅ Want It As a File?
+## 🧾 2. Demo Video – Guidelines
 
-Let me know if you want me to generate a downloadable `README.md` file now.
+You must **record a screen demo** showing the actual solution working:
+
+- Phone call via Vapi
+- Agent asking questions
+- Answers being parsed
+- Data going to MongoDB
+- n8n nodes shown live
+- Qualified lead marked ✅
+
+🎥 **Tip**: Use [OBS Studio](https://obsproject.com/) or any screen recorder  
+🎯 **Avoid** showing your face — only record your screen
+
+Upload the video to:
+
+- Google Drive (Shareable link)
+- YouTube (Unlisted)
+
+---
+
+## 💾 3. Source Code or Workflow
+
+You have 2 options:
+
+### Option A: GitHub Repo
+
+- Push your project files to GitHub
+- Include:
+  - `README.md`
+  - `.n8n` export of workflow (use "Export" in n8n)
+  - Any Node.js scripts used
+  - `.env.example` if needed
+
+### Option B: ZIP File
+
+- Zip all relevant files:
+  - `n8n-workflow.json`
+  - Any code files (`index.js`, etc.)
+  - README or documentation PDF
+  - Screenshots (optional)
+
+---
+
+## 📤 Submission
+
+Go to the [Swafinix Hackathon Submission Portal](https://unstop.com/) and upload:
+
+- ✅ Demo video
+- ✅ GitHub link or ZIP file
+- ✅ README or PDF documentation
+
+Before 10 August 2025, 01:21 AM IST.
+
+---
+
+## ✅ Let Me Know if You Need Help With:
+
+- Exporting your `n8n` workflow as JSON
+- Recording a high-quality screen demo
+- Uploading to GitHub or Drive
+- Writing the PDF version of the documentation
+
+I can also help polish or translate this into a well-designed PDF if needed.
+
+Ready to win this? 🚀
