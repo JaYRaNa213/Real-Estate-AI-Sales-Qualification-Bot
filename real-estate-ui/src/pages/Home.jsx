@@ -15,76 +15,33 @@ export default function Home() {
 
   // useEffect example in React
 useEffect(() => {
-  axios.get("http://localhost:5000/api/leads").then(res => {
-    setLeads(res.data);
-  });
+  axios.get("http://localhost:5000/api/leads")
+    .then(res => {
+      const data = res.data;
+      setLeads(data);
+
+      const qualified = data.filter(lead => lead.qualified).length;
+      const unqualified = data.filter(lead => !lead.qualified).length;
+      const thisMonth = data.filter(lead => {
+        const leadDate = new Date(lead.createdAt);
+        const now = new Date();
+        return (
+          leadDate.getMonth() === now.getMonth() &&
+          leadDate.getFullYear() === now.getFullYear()
+        );
+      }).length;
+
+      setStats({
+        total: data.length,
+        qualified,
+        unqualified,
+        thisMonth
+      });
+    })
+    .catch(err => console.error("Error fetching leads:", err));
 }, []);
 
 
-  // const TEST_MODE = true;
-
-  // useEffect(() => {
-  //   if (TEST_MODE) {
-  //     const testLeads = [
-  //       {
-  //         _id: "test123",
-  //         name: "John Doe",
-  //         phone: "+91 9876543210",
-  //         email: "john@example.com",
-  //         interestedIn: "2BHK Apartment",
-  //         qualified: true,
-  //         budget: "50L",
-  //         location: "Mumbai",
-  //         timeline: "1 month",
-  //         source: "Voice Bot",
-  //         createdAt: new Date().toISOString()
-  //       },
-  //       {
-  //         _id: "test124",
-  //         name: "Sarah Wilson",
-  //         phone: "+91 9876543211",
-  //         email: "sarah@example.com",
-  //         interestedIn: "3BHK Villa",
-  //         qualified: true,
-  //         budget: "1.2Cr",
-  //         location: "Bangalore",
-  //         timeline: "2 weeks",
-  //         source: "Chat Bot",
-  //         createdAt: new Date().toISOString()
-  //       },
-  //       {
-  //         _id: "test125",
-  //         name: "Mike Johnson",
-  //         phone: "+91 9876543212",
-  //         email: "mike@example.com",
-  //         interestedIn: "1BHK Studio",
-  //         qualified: false,
-  //         budget: "25L",
-  //         location: "Pune",
-  //         timeline: "6 months",
-  //         source: "Web Form",
-  //         createdAt: new Date().toISOString()
-  //       }
-  //     ];
-  //     setLeads(testLeads);
-  //     setStats({
-  //       total: testLeads.length,
-  //       qualified: testLeads.filter(l => l.qualified).length,
-  //       unqualified: testLeads.filter(l => !l.qualified).length,
-  //       thisMonth: testLeads.length
-  //     });
-  //   } else {
-  //     fetchLeads().then(data => {
-  //       setLeads(data);
-  //       setStats({
-  //         total: data.length,
-  //         qualified: data.filter(l => l.qualified).length,
-  //         unqualified: data.filter(l => !l.qualified).length,
-  //         thisMonth: data.filter(l => new Date(l.createdAt).getMonth() === new Date().getMonth()).length
-  //       });
-  //     }).catch(console.error);
-  //   }
-  // }, []);
 
   const filteredLeads = leads.filter((lead) => {
     const matchesFilter = filter === "all" || 
@@ -203,7 +160,7 @@ useEffect(() => {
               <div>
                 <p className="text-sm font-medium text-gray-500">Qualified</p>
                 <p className="text-3xl font-bold text-green-600">
-                  {stats.qualified.lead}
+                  {stats.qualified}
                 </p>
               </div>
               <div className="bg-green-100 p-3 rounded-full">
