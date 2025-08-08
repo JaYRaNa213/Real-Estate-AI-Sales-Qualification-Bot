@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import LeadCard from "../components/LeadCard";
 import { fetchLeads } from "../api";
+
 import axios from "axios";
+import Papa from "papaparse";
+import { saveAs } from "file-saver";
+
+import { unparse } from "papaparse";
 export default function Home() {
   const [leads, setLeads] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -40,6 +45,24 @@ useEffect(() => {
     })
     .catch(err => console.error("Error fetching leads:", err));
 }, []);
+
+const handleDownloadCSV = async () => {
+  try {
+    const response = await axios.get("http://localhost:5000/api/leads"); 
+    const data = response.data;
+
+    // Optional: Format date fields if needed
+    const csv = Papa.unparse(data);
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "leads.csv");
+  } catch (error) {
+    console.error("Failed to fetch or download CSV:", error);
+  }
+};
+
+
+
 
 
 
@@ -116,6 +139,13 @@ useEffect(() => {
               <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg">
                 Call To Assistant
               </button>
+              <button
+  onClick={handleDownloadCSV}
+  className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"
+>
+  Import CSV
+</button>
+
             </div>
           </div>
         </div>
