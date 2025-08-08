@@ -1,19 +1,22 @@
 📁 real-estate-bot
+├── .env
 ├── .gitignore
 ├── index.html
 ├── package-lock.json
 ├── package.json
-├── postcss.config.js
 ├── public
 ├── src
 │   ├── api.js
 │   ├── App.jsx
 │   ├── components
-│   │   └── LeadCard.jsx
+│   │   ├── CallCustomer.jsx
+│   │   ├── LeadCard.jsx
+│   │   └── LeadForm.jsx
 │   ├── index.css
 │   ├── index.jsx
-│   └── pages
-│       └── Home.jsx
+│   ├── pages
+│   │   └── Home.jsx
+│   └── tailwind.css
 ├── tailwind.config.js
 ├── tree.js
 ├── tree.txt

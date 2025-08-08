@@ -8,6 +8,8 @@ import {logger} from '../utils/logger.js';
 export const createLead = async (req, res) => {
   try {
     let { name, phone, location, budget, loanNeeded, sessionId, qualified, intent } = req.body;
+    budget = Number(budget);
+
 
     if (!location || !budget || !sessionId) {
       return res.status(400).json({ message: 'location, budget, and sessionId are required.' });

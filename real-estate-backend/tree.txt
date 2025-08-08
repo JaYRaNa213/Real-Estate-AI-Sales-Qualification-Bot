@@ -3,7 +3,6 @@
 ├── .gitignore
 ├── package-lock.json
 ├── package.json
-├── README.md
 ├── src
 │   ├── app.js
 │   ├── config
@@ -18,6 +17,7 @@
 │   ├── services
 │   │   └── lead.service.js
 │   └── utils
-│       └── logger.js
+│       ├── logger.js
+│       └── triggerN8N.js
 ├── tree.js
 └── tree.txt

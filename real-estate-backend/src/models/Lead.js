@@ -13,7 +13,11 @@ const leadSchema = new mongoose.Schema({
   loanNeeded: { type: Boolean, default: false },              // Whether loan is needed
   sessionId: { type: String, trim: true },                    // Vapi session ID (track bot convo)
   qualified: { type: Boolean },
-  createdAt: { type: Date, default: Date.now },               // Ensure createdAt is set
+  createdAt: { type: Date, default: Date.now },    
+  interestedIn: { type: String, trim: true },
+timeline: { type: String, trim: true },
+source: { type: String, trim: true },
+           // Ensure createdAt is set
 });
 
 
