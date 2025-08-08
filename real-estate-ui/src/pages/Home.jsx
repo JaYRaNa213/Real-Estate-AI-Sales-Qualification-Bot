@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import LeadCard from "../components/LeadCard";
 import { fetchLeads } from "../api";
+import { getVapiInstance } from '../vapiClient';
 
 import axios from "axios";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 
-import { unparse } from "papaparse";
 export default function Home() {
   const [leads, setLeads] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -15,66 +15,77 @@ export default function Home() {
     total: 0,
     qualified: 0,
     unqualified: 0,
-    thisMonth: 0
+    thisMonth: 0,
   });
 
-  // useEffect example in React
-useEffect(() => {
-  axios.get("http://localhost:5000/api/leads")
-    .then(res => {
-      const data = res.data;
-      setLeads(data);
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/leads")
+      .then((res) => {
+        const data = res.data;
+        setLeads(data);
 
-      const qualified = data.filter(lead => lead.qualified).length;
-      const unqualified = data.filter(lead => !lead.qualified).length;
-      const thisMonth = data.filter(lead => {
-        const leadDate = new Date(lead.createdAt);
-        const now = new Date();
-        return (
-          leadDate.getMonth() === now.getMonth() &&
-          leadDate.getFullYear() === now.getFullYear()
-        );
-      }).length;
+        const qualified = data.filter((lead) => lead.qualified).length;
+        const unqualified = data.filter((lead) => !lead.qualified).length;
+        const thisMonth = data.filter((lead) => {
+          const leadDate = new Date(lead.createdAt);
+          const now = new Date();
+          return (
+            leadDate.getMonth() === now.getMonth() &&
+            leadDate.getFullYear() === now.getFullYear()
+          );
+        }).length;
 
-      setStats({
-        total: data.length,
-        qualified,
-        unqualified,
-        thisMonth
-      });
-    })
-    .catch(err => console.error("Error fetching leads:", err));
-}, []);
+        setStats({
+          total: data.length,
+          qualified,
+          unqualified,
+          thisMonth,
+        });
+      })
+      .catch((err) => console.error("Error fetching leads:", err));
+  }, []);
 
-const handleDownloadCSV = async () => {
+  const handleDownloadCSV = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/leads");
+      const data = response.data;
+      const csv = Papa.unparse(data);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      saveAs(blob, "leads.csv");
+    } catch (error) {
+      console.error("Failed to fetch or download CSV:", error);
+    }
+  };
+
+ const handleStartAssistantCall = async () => {
+  console.log("📞 Starting assistant voice bot...");
+
   try {
-    const response = await axios.get("http://localhost:5000/api/leads"); 
-    const data = response.data;
-
-    // Optional: Format date fields if needed
-    const csv = Papa.unparse(data);
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, "leads.csv");
-  } catch (error) {
-    console.error("Failed to fetch or download CSV:", error);
+    const vapi = await getVapiInstance();
+    vapi.startConversation({
+      assistant: {
+        id: import.meta.env.VITE_VAPI_ASSISTANT_ID,
+      },
+    });
+  } catch (err) {
+    console.error("❌ Failed to start conversation:", err);
   }
 };
 
 
-
-
-
-
   const filteredLeads = leads.filter((lead) => {
-    const matchesFilter = filter === "all" || 
-                         (filter === "qualified" && lead.qualified) || 
-                         (filter === "unqualified" && !lead.qualified);
-    const matchesSearch = lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         lead.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "qualified" && lead.qualified) ||
+      (filter === "unqualified" && !lead.qualified);
+    const matchesSearch =
+      lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lead.location.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -136,9 +147,13 @@ const handleDownloadCSV = async () => {
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg">
-                Call To Assistant
-              </button>
+              
+        <button
+          onClick={handleStartAssistantCall}
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          Call Assistant
+        </button>
               <button
   onClick={handleDownloadCSV}
   className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"

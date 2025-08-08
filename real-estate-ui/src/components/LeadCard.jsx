@@ -148,9 +148,8 @@ export default function LeadCard({ lead }) {
           >
             📞 Call To Customer
           </button>
-          {callingPhone && <CallCustomer phone={callingPhone} />}
 
-
+          
           {callingPhone && (
   <>
     <CallCustomer phone={callingPhone} />
@@ -162,6 +161,7 @@ export default function LeadCard({ lead }) {
     </button>
   </>
 )}
+
 
 
           <button className="flex-1 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium text-sm">

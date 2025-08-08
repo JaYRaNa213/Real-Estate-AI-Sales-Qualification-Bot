@@ -1,12 +1,12 @@
 // src/App.jsx
 
 import React from "react";
-import Home from "./pages/Home";
+import DemoSplitView from "./pages/DemoSplitView";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Home />
+    <div className="min-h-screen bg-white">
+      <DemoSplitView />
     </div>
   );
 }

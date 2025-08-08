@@ -1,49 +1,44 @@
-import { useEffect, useState } from "react";
+// src/components/CallCustomer.jsx
+
+import { useEffect } from "react";
+import { getVapiInstance } from "../vapiClient";
 
 const CallCustomer = ({ phone }) => {
-  console.log("Calling phone number:", phone);
-
-  const [sdkLoaded, setSdkLoaded] = useState(false);
-
   useEffect(() => {
-    const checkSdkLoaded = () => {
-      if (window.Vapi) {
-        setSdkLoaded(true);
-      } else {
-        setTimeout(checkSdkLoaded, 100); // Retry every 100ms
-      }
-    };
+  if (!phone) return;
 
-    checkSdkLoaded();
-  }, []);
+  let vapi;
 
-  useEffect(() => {
-    if (!sdkLoaded) return;
+  const startCall = async () => {
+    try {
+      vapi = await getVapiInstance();
 
-    const vapi = new window.Vapi({
-      apiKey: import.meta.env.VITE_VAPI_API_KEY,
-    });
+      vapi.on("call-start", () => console.log("📲 Call started"));
+      vapi.on("call-end", () => console.log("✅ Call ended"));
+      vapi.on("error", (error) => console.error("❌ Call error:", error));
 
-    let formattedPhone = phone;
-    if (!formattedPhone.startsWith("+")) {
-      formattedPhone = "+91" + formattedPhone.replace(/\D/g, "");
+      vapi.start({
+        assistant: { id: import.meta.env.VITE_VAPI_ASSISTANT_ID },
+        phone: { number: phone },
+      });
+    } catch (err) {
+      console.error("❌ Vapi error:", err.message);
     }
+  };
 
-    vapi.connect({
-      assistantId: import.meta.env.VITE_VAPI_ASSISTANT_ID,
-      conversationId: crypto.randomUUID(),
-      user: {
-        phoneNumber: formattedPhone,
-      },
-    });
+  startCall();
 
-    // Optional: clean up
-    return () => {
-      vapi.hangUp?.();
-    };
-  }, [sdkLoaded, phone]);
+  return () => {
+    if (vapi) vapi.hangUp();
+  };
+}, [phone]);
 
-  return null;
+
+  return (
+    <div className="p-4 border rounded">
+      <p>📞 Calling customer at <strong>{phone}</strong>...</p>
+    </div>
+  );
 };
 
 export default CallCustomer;
