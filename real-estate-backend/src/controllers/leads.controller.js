@@ -7,27 +7,13 @@ import {logger} from '../utils/logger.js';
  */
 export const createLead = async (req, res) => {
   try {
-    let { name, location, budget, loanNeeded, sessionId, qualified,inte } = req.body;
+    let { name, phone, location, budget, loanNeeded, sessionId, qualified, intent } = req.body;
 
     if (!location || !budget || !sessionId) {
       return res.status(400).json({ message: 'location, budget, and sessionId are required.' });
     }
 
-    // 🔁 Parse budget to Number if it's a string
-    // budget = Number(budget);
-
-    // // ✅ If intent not provided, generate it
-    // if (!intent || intent === "") {
-    //   if (budget > 4000000) {
-    //     intent = "buying";
-    //   } else if (budget > 2000000) {
-    //     intent = "browsing";
-    //   } else {
-    //     intent = "low budget";
-    //   }
-    // }
-
-    const newLead = new Lead({ name, location, budget, loanNeeded, sessionId, qualified });
+    const newLead = new Lead({ name, phone, location, budget, loanNeeded, sessionId, qualified, intent });
     await newLead.save();
 
     res.status(201).json({ message: 'Lead created successfully.', lead: newLead });
@@ -36,6 +22,7 @@ export const createLead = async (req, res) => {
     res.status(500).json({ message: 'Server error.' });
   }
 };
+
 
 
 
