@@ -35,13 +35,15 @@ A fully automated AI voice qualification system combining:
 
 ## 🧠 Architecture Diagram
 
-```mermaid
+
+
 graph TD
   A[Vapi Voice Call] --> B{OpenAI NLP Engine}
-  B --> C[n8n Webhook (POST)]
+  B --> C[n8n Webhook POST]
   C --> D[Function Node: Budget Parsing & Qualification]
-  D --> E[MongoDB: Save Lead Data]
+  D --> E[MongoDB Save Lead Data]
   D --> F[Response Node: Return Qualification Status]
+  
 🧱 Key Features
 Conversational AI through voice calls
 
