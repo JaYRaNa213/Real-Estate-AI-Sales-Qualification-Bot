@@ -1,4 +1,4 @@
-# 🏡 Real Estate AI Sales Qualification Bot 🤖
+#  Real Estate AI  Qualification Bot 🤖
 
 An intelligent, voice-based AI assistant designed to automate lead qualification in real estate.  
 Built using **Vapi**, **OpenAI**, and **n8n** with MongoDB backend for structured lead storage. This solution reduces repetitive agent calls, speeds up lead processing, and improves conversion rates.
