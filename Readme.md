@@ -1,189 +1,218 @@
 # 🏡 Real Estate AI Sales Qualification Bot 🤖
 
-A voice-based AI assistant that qualifies real estate leads automatically through dynamic conversations, powered by Vapi, OpenAI, and n8n. Designed for agents, property consultants, and lead generation platforms.
+An intelligent, voice-based AI assistant designed to automate lead qualification in real estate.  
+Built using **Vapi**, **OpenAI**, and **n8n** with MongoDB backend for structured lead storage. This solution reduces repetitive agent calls, speeds up lead processing, and improves conversion rates.
 
 ---
 
 ## 📌 Problem Statement
 
-**Real Estate agents** spend a lot of time answering repetitive qualification questions from potential buyers or tenants (budget, location, property type, etc). This causes inefficiency and lead leakage.
+Real estate agents spend excessive time answering repetitive qualification questions (budget, location, property type, etc), leading to inefficiencies and missed opportunities.
 
-### Objective:
-Automate the **sales qualification process** using an AI voice agent that:
+### Objective
 
-- Engages leads via phone
-- Asks qualifying questions (budget, type, location)
-- Translates spoken text into structured data
-- Saves lead to database or forwards to CRM
-- Qualifies or disqualifies leads intelligently
+Automate the **sales qualification process** by building an AI voice agent that:
+
+- Engages leads through phone conversations
+- Asks dynamic, qualifying questions intelligently
+- Translates spoken responses into structured data
+- Saves leads in database or forwards to CRM systems
+- Provides automatic qualification decisions (`qualified: true/false`)
 
 ---
 
 ## 🚀 Solution Overview
 
-An intelligent AI voice assistant built with:
+A fully automated AI voice qualification system combining:
 
-- **Vapi** for real-time voice interaction
-- **OpenAI** for dynamic NLP-based responses
-- **n8n** to automate logic, parsing, and lead handling
-- **MongoDB** to store qualified leads
-- **ngrok** to expose local webhook for testing
-
-🎥 [**Demo Video (screen recording)**](#) *(Add your link here)*
+- **Vapi** for real-time voice call interaction  
+- **OpenAI GPT** for dynamic natural language understanding & generation  
+- **n8n** workflow automation to process data, parse responses, save leads  
+- **MongoDB** for storing qualified lead information  
+- **ngrok** to expose local webhooks during development/testing  
 
 ---
 
-## 🧠 Features
-
-- Conversational AI (via phone)
-- Budget parsing ("50 lakhs" → 5000000)
-- Auto-qualification (`qualified: true/false`)
-- Lead data saved to MongoDB
-- Easily customizable flow with n8n
-
----
-
-## 🧱 Tech Stack Used
-
-| Tool         | Purpose                      |
-|--------------|------------------------------|
-| **Vapi**     | AI Voice Interface (Call)    |
-| **OpenAI**   | LLM logic & memory            |
-| **n8n**      | Workflow Automation + Webhook|
-| **MongoDB**  | Lead storage backend         |
-| **ngrok**    | Localhost tunnel (webhook)   |
-
----
-
-## ⚙️ How It Works (Architecture)
+## 🧠 Architecture Diagram
 
 ```mermaid
 graph TD
-A[Vapi Voice Call] --> B{OpenAI logic}
-B --> C[n8n Webhook (POST)]
-C --> D[n8n Function Node]
-D --> E[Budget Parsing + Qualification]
-E --> F[Save to MongoDB]
-E --> G[Send to n8n Response Node]
-🔁 Full Workflow Steps (n8n)
-Webhook Node
+  A[Vapi Voice Call] --> B{OpenAI NLP Engine}
+  B --> C[n8n Webhook (POST)]
+  C --> D[Function Node: Budget Parsing & Qualification]
+  D --> E[MongoDB: Save Lead Data]
+  D --> F[Response Node: Return Qualification Status]
+🧱 Key Features
+Conversational AI through voice calls
 
-Receives payload from Vapi/agent
+Budget and location parsing (e.g., "50 lakhs" → 5,000,000)
 
-Contains budget, location, propertyType, etc.
+Intelligent lead qualification logic
 
-Function Node (e.g., Budget Parser)
+Automatic lead storage in MongoDB
 
-js
-Copy
-Edit
-const rawBudget = $json.budget;
+Easy workflow customization through n8n UI
 
-function textToNumber(text) {
-  if (!text) return 0;
-  text = text.toLowerCase();
-  if (text.includes("lakh")) {
-    const numberPart = parseFloat(text.replace(/[^\d\.]/g, ''));
-    return numberPart * 100000;
-  }
-  return parseFloat(text);
-}
+⚙️ Setup & Running Locally
+Clone repo:
 
-return {
-  json: {
-    ...$json,
-    budget: textToNumber(rawBudget),
-  }
-}
-Qualification Logic
-
-If budget >= 2500000 and location exists, mark qualified = true.
-
-MongoDB Node
-
-Collection: leads
-
-Stores the structured data including qualification result.
-
-Response Node
-
-json
-Copy
-Edit
-{
-  "status": "Lead saved!",
-  "qualified": {{ $json["qualified"] }}
-}
-📦 How to Run Locally
-1. Clone Repository
 bash
 Copy
 Edit
 git clone https://github.com/your-username/real-estate-ai-bot.git
 cd real-estate-ai-bot
-2. Set up n8n
+Install & start n8n:
+
 bash
 Copy
 Edit
 npm install -g n8n
 n8n start
-3. Use ngrok to Expose Webhook
+Expose local webhook with ngrok:
+
 bash
 Copy
 Edit
 ngrok http 5678
-# Copy the HTTPS webhook URL to use in Vapi
-4. Create Workflow in n8n
-Webhook ➝ Function ➝ MongoDB ➝ Response
+Use the HTTPS ngrok URL in your Vapi configuration.
 
-Ensure MongoDB is running (mongodb://localhost:27017)
+Ensure MongoDB is running locally or use cloud instance.
 
-DB Name: realestate_bot, Collection: leads
+Create n8n workflow:
+Webhook → Function (budget parse + qualification) → MongoDB → Response
 
-🎥 Demo Video
-👉 Add a screen-recorded video showing:
-
-Vapi call in action
-
-Live qualification
-
-MongoDB showing saved lead
-
-No faces or personal info
-
-📎 Add YouTube or Google Drive link here.
-
-📄 Submission Checklist
-✅ Working AI prototype with screen-recorded video
-
-✅ Source code (n8n export + backend if any)
-
-✅ Documentation (this file or PDF)
-
-✅ Uses at least 2 tools: Vapi + n8n + OpenAI
-
-🏆 Hackathon Info
-Hackathon: Swafinix AI Hackathon 2025
-
+📁 Project Folder Structure
+Frontend React App
+pgsql
+Copy
+Edit
+real-estate-bot
+├── .env
+├── .gitignore
+├── index.html
+├── package-lock.json
+├── package.json
+├── pnpm-lock.yaml
+├── public
+├── src
+│   ├── api.js
+│   ├── App.jsx
+│   ├── components
+│   │   ├── AssistantCallButton.jsx
+│   │   ├── CallCustomer.jsx
+│   │   ├── LeadCard.jsx
+│   │   ├── LeadForm.jsx
+│   │   ├── Navbar.jsx
+│   │   └── PropertyCard.jsx
+│   ├── index.css
+│   ├── index.jsx
+│   ├── pages
+│   │   ├── DemoSplitView.jsx
+│   │   ├── Home.jsx
+│   │   └── PropertyDemo.jsx
+│   ├── tailwind.css
+│   └── vapiClient.js
+├── tailwind.config.js
+├── tree.js
+├── tree.txt
+└── vite.config.js
+Backend (Node.js + Express + MongoDB)
+pgsql
+Copy
+Edit
+real-estate-bot
+├── .env
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── src
+│   ├── app.js
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   └── leads.controller.js
+│   ├── models
+│   │   └── Lead.js
+│   ├── routes
+│   │   └── leads.routes.js
+│   ├── server.js
+│   ├── services
+│   │   └── lead.service.js
+│   └── utils
+│       ├── logger.js
+│       └── triggerN8N.js
+├── tree.js
+└── tree.txt
+📄 Hackathon & Submission Details
+Swafinix AI Hackathon 2025
 Category: Real Estate – AI Sales Qualification Bot
+Participant: Jay Prakash Rana
+Email: jayrana0909@gmail.com
+GitHub: [your-github-handle]
+Status: Working Prototype Complete
 
-Submission Deadline: 10 Aug 2025, 01:21 AM IST
+Important Dates
+Event	Date & Time (IST)
+Registration Deadline	01 Aug 2025, 12:00 AM IST
+Hackathon Start	01 Aug 2025
+Submission Deadline	10 Aug 2025, 01:21 AM IST
+Winners Announcement	15 Aug 2025
 
-Status: ✅ Working Prototype Complete
+Submission Requirements
+Working AI prototype (screen recording demo)
 
-✨ Future Improvements
-Integrate CRM (e.g., HubSpot, Zoho)
+Source code / workflow design (GitHub repo or ZIP)
 
-Connect WhatsApp/SMS follow-ups
+Documentation covering problem, tech stack, and solution workflow
 
-Dashboard for lead insights
+🏆 Why Participate?
+Hands-on experience with real-world AI automation tools
 
-Multilingual agent support
+Network with industry experts and innovators
 
-📧 Contact
+Opportunity for PPO at 12 LPA with Swafinix Technologies Pvt. Ltd.
+
+Prizes: MacBook, iPhone, Apple Watch, Cash, and more!
+
+📞 Contact
 Jay Prakash Rana
 Email: jayrana0909@gmail.com
-GitHub: [your-handle]
+GitHub: [your-github-handle]
+
+📺 Demo Video
+(Add your demo video link here)
+Showcasing:
+
+Voice call interaction with Vapi
+
+AI-driven qualification conversation
+
+Lead data saved in MongoDB in real-time
+
+Live n8n workflow visualization
+
+⚠️ Notes & Recommendations
+Update environment variables for n8n per latest deprecations:
+
+Set N8N_RUNNERS_ENABLED=true
+
+Remove deprecated EXECUTIONS_PROCESS variable
+
+Use .env.example for environment variable samples.
+
+📚 References
+Vapi Documentation
+
+OpenAI API Docs
+
+n8n Documentation
+
+MongoDB Documentation
+
+Good luck and happy coding! 🚀
+Jay Prakash Rana
+
+(This README was generated and formatted professionally for hackathon submission and project clarity.)
 
 yaml
 Copy
@@ -191,69 +220,13 @@ Edit
 
 ---
 
-## 🧾 2. Demo Video – Guidelines
+If you want, I can also help you generate a PDF or add any screenshots or badges! Just say the word.
 
-You must **record a screen demo** showing the actual solution working:
 
-- Phone call via Vapi
-- Agent asking questions
-- Answers being parsed
-- Data going to MongoDB
-- n8n nodes shown live
-- Qualified lead marked ✅
 
-🎥 **Tip**: Use [OBS Studio](https://obsproject.com/) or any screen recorder  
-🎯 **Avoid** showing your face — only record your screen
 
-Upload the video to:
 
-- Google Drive (Shareable link)
-- YouTube (Unlisted)
 
----
 
-## 💾 3. Source Code or Workflow
 
-You have 2 options:
-
-### Option A: GitHub Repo
-
-- Push your project files to GitHub
-- Include:
-  - `README.md`
-  - `.n8n` export of workflow (use "Export" in n8n)
-  - Any Node.js scripts used
-  - `.env.example` if needed
-
-### Option B: ZIP File
-
-- Zip all relevant files:
-  - `n8n-workflow.json`
-  - Any code files (`index.js`, etc.)
-  - README or documentation PDF
-  - Screenshots (optional)
-
----
-
-## 📤 Submission
-
-Go to the [Swafinix Hackathon Submission Portal](https://unstop.com/) and upload:
-
-- ✅ Demo video
-- ✅ GitHub link or ZIP file
-- ✅ README or PDF documentation
-
-Before 10 August 2025, 01:21 AM IST.
-
----
-
-## ✅ Let Me Know if You Need Help With:
-
-- Exporting your `n8n` workflow as JSON
-- Recording a high-quality screen demo
-- Uploading to GitHub or Drive
-- Writing the PDF version of the documentation
-
-I can also help polish or translate this into a well-designed PDF if needed.
-
-Ready to win this? 🚀
+Ask ChatGPT
