@@ -11,11 +11,7 @@
 
 [Live Demo](https://realestateaiagentjayprakash.vercel.app/) • [Documentation](#documentation) • [Video Demo](#demo-video)
 
-
-![n8n Workflow](./images/n8n_workflow.png)
-
-![User and Admin](./images/user_and_admin.png)
-
+</div>
 
 ---
 
