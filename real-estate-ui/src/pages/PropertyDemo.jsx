@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { getVapiInstance } from "../vapiClient";
 import PropertyCard from "../components/PropertyCard";
+import AssistantCallButton from "../components/AssistantCallButton";
+
 // import AssistantCallButton from "./components/AssistantCallButton";
 const propertyCategories = {
   apartments: {
@@ -276,7 +278,7 @@ export default function PropertyDemo() {
         </div>
 
         {/* AI Agent Button */}
-        <div className="flex justify-center mb-8">
+        {/* <div className="flex justify-center mb-8">
           <button 
            onClick={handleStartAssistantCall}
             className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl text-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-2xl hover:shadow-purple-500/25 transform hover:scale-105"
@@ -291,6 +293,11 @@ export default function PropertyDemo() {
               </svg>
             </div>
           </button>
+        </div> */}
+
+        <div className="flex justify-center mb-8">
+          <AssistantCallButton />
+
         </div>
 
         {/* Search and Filters */}
