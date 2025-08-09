@@ -13,7 +13,7 @@
 
 </div>
 
-<img src="relative/path/to/image.png" alt="Alt Text" width="500" />
+<img src="/images/n8n_workflow.png" alt="Alt Text" width="500" />
 <img src="relative/path/to/image.png" alt="Alt Text" width="500" />
 <img src="relative/path/to/image.png" alt="Alt Text" width="500" />
 
