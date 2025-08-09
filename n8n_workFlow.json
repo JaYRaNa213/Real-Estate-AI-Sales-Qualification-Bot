@@ -1,0 +1,321 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "qualified-lead",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        320
+      ],
+      "id": "60e5ca21-696e-48fd-9621-e3bb3e106592",
+      "name": "Webhook",
+      "webhookId": "2c71161e-ba43-44bf-ba5d-d73d42c65081",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0dc411ea-5471-45ad-bb47-ce84bbeb9568",
+              "leftValue": "={{$json[\"budget\"]}}",
+              "rightValue": 3000000,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        320
+      ],
+      "id": "c0282cf5-9c64-4a92-b639-a45bbbf7a0d0",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = items[0].json;\n\nlet qualified = true;\nlet intent = \"browsing\";\n\n// Qualification logic\nif (lead.budget < 2000000) {\n  qualified = false;\n  intent = \"low_budget\";\n} else if (lead.budget >= 5000000) {\n  intent = \"buying\";\n} else {\n  intent = \"browsing\";\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      qualified,\n      intent,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        80
+      ],
+      "id": "5b44cab8-f9c6-49b2-b6d5-0a0e22e2baf8",
+      "name": "For Qualified"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = items[0].json;\n\nlet qualified = false;\nlet intent = \"browsing\";\n\n// Qualification logic\nif (lead.budget < 2000000) {\n  qualified = false;\n  intent = \"low_budget\";\n} else if (lead.budget >= 5000000) {\n  intent = \"buying\";\n} else {\n  intent = \"browsing\";\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      qualified,\n      intent,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        560
+      ],
+      "id": "94260d50-9629-4cd0-b906-dce7c066ffa2",
+      "name": "unQualified"
+    },
+    {
+      "parameters": {
+        "jsCode": "// No need to dig into .body, just return the input as-is\nreturn $input.all().map(it => {\n  return {\n    json: {\n      name : it.json.name,\n      phone:it.json.phone,\n      location: it.json.location,\n      budget: it.json.budget,\n      loanNeeded: it.json.loanNeeded,\n      sessionId: it.json.sessionId,\n      \n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -288,
+        320
+      ],
+      "id": "f005fcfa-e182-4c92-9751-d88aa7c57a6f",
+      "name": "Format Lead"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"Lead saved!\"\n  \n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        800,
+        288
+      ],
+      "id": "6dca2143-c411-4165-a6bc-08c6d2a25a9f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5000/api/leads",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{$json.name}}\",\n  \"phone\": \"{{$json.phone}}\",\n  \"location\": \"{{$json.location}}\",\n  \"budget\": {{$json.budget}},\n  \"loanNeeded\": {{$json.loanNeeded}},\n  \"sessionId\": {{ $json.sessionId ? `\"${$json.sessionId}\"` : `\"unknown-session\"` }},\n\n  \"qualified\": {{$json.qualified}},\n  \"intent\": \"{{$json.intent === 'buying' ? 'buy' : $json.intent}}\"\n\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        336,
+        368
+      ],
+      "id": "e7b26d7f-eb12-45af-aa83-bd94f1934d06",
+      "name": "send to Backend"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "real estate Agent Sheet",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        560,
+        416
+      ],
+      "id": "0fc41119-1da3-47e3-9811-5d178dbc4157",
+      "name": "Create spreadsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYIcawgH68QQ7ar",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "jayrana0909@gmail.com",
+        "toEmail": "tresurejay6@gmail.com",
+        "subject": "=New Qualified Lead: {{$json.name}}",
+        "emailFormat": "text",
+        "text": "=A new qualified lead has been received:\n\nName: {{$json.name}}\nPhone: {{$json.phone}}\nBudget: ₹{{$json.budget}}\nLocation: {{$json.location}}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        192
+      ],
+      "id": "26921cb5-b4cc-4f35-8f4a-8f7dd624a5c6",
+      "name": "Send email",
+      "webhookId": "ea9814fe-1417-41f5-b7af-e7e834c2e6d6",
+      "credentials": {
+        "smtp": {
+          "id": "KMZ4GMB25iRdXxlQ",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// TEMP LOG for debugging\nconsole.log(\"Incoming JSON:\", $json);\n\nlet rawData = {};\n\ntry {\n  rawData =\n    $json.body?.message?.toolCalls?.[0]?.function?.arguments ||\n    $json.function?.arguments ||\n    $json.body?.function?.arguments ||\n    $json.body ||\n    $json;\n} catch (e) {\n  console.log(\"Data extraction error:\", e.message);\n}\n\nfunction wordsToNumbers(text) {\n  if (!text) return 0;\n  if (typeof text === 'number') return text;\n  if (!isNaN(Number(text))) return Number(text);\n\n  text = text.toLowerCase();\n\n  const mapping = {\n    one: 1, two: 2, three: 3, four: 4, five: 5,\n    six: 6, seven: 7, eight: 8, nine: 9, ten: 10,\n    eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15,\n    sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19,\n    twenty: 20, thirty: 30, forty: 40, fifty: 50,\n    sixty: 60, seventy: 70, eighty: 80, ninety: 90\n  };\n\n  const words = text.split(/[\\s-]+/);\n  let total = 0;\n  let current = 0;\n\n  for (let word of words) {\n    if (!isNaN(Number(word))) {\n      current += Number(word);\n    } else if (mapping[word]) {\n      current += mapping[word];\n    } else if (word === \"lakh\" || word === \"lakhs\") {\n      total += (current || 1) * 100000;\n      current = 0;\n    } else if (word === \"crore\" || word === \"crores\") {\n      total += (current || 1) * 10000000;\n      current = 0;\n    }\n  }\n\n  return total + current;\n}\n\nreturn {\n  json: {\n    name:rawData.name ?? null,\n    phone:rawData.phone ?? null,\n    location: rawData.location ?? null,\n    loanNeeded: rawData.loanNeeded ?? false,\n    \n    sessionId: rawData.sessionId ?? null,\n    budget: wordsToNumbers(rawData.budget)\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        320
+      ],
+      "id": "55854819-7d1b-433d-a30a-25d5e038e598",
+      "name": "Raw Data Node"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Raw Data Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "For Qualified",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "unQualified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "For Qualified": {
+      "main": [
+        [
+          {
+            "node": "send to Backend",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "unQualified": {
+      "main": [
+        [
+          {
+            "node": "send to Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Lead": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send to Backend": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send email": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Raw Data Node": {
+      "main": [
+        [
+          {
+            "node": "Format Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "439415ff17d1f51bdf8055d70df3d433d20515c452a626107fe520dd849b61e4"
+  }
+}
