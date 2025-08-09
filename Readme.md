@@ -105,7 +105,6 @@ Automate the entire lead qualification process with an AI voice agent that:
 ### Development Tools
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
-- **ngrok** - Local tunnel for webhooks
 - **Git** - Version control
 
 ---
@@ -126,7 +125,6 @@ graph TD
     H --> J[Qualified Leads]
     H --> K[Analytics & Reports]
     
-    E --> L[CRM Integration]
     E --> M[Email Notifications]
     E --> N[SMS Alerts]
 ```
@@ -144,7 +142,31 @@ Before you begin, ensure you have the following installed:
 - **MongoDB** (local or cloud)
 - **Git**
 
-### Quick Start
+### Quick Start on Replit
+
+1. **Fork this Repl**
+   ```bash
+   # Navigate to the project URL
+   https://replit.com/@your-username/real-estate-ai-bot
+   ```
+
+2. **Set Environment Variables** in Replit Secrets:
+   - `VAPI_PUBLIC_KEY`
+   - `VAPI_PRIVATE_KEY`
+   - `VAPI_ASSISTANT_ID`
+   - `OPENAI_API_KEY`
+   - `MONGODB_URI`
+
+3. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+4. **Start the Application**
+   - Click the "Run" button in Replit
+   - The app will start on port 5000
+
+### Local Development Setup
 
 1. **Clone the Repository**
    ```bash
@@ -154,13 +176,7 @@ Before you begin, ensure you have the following installed:
 
 2. **Install Dependencies**
    ```bash
-   # Install frontend dependencies
    npm install
-   
-   # Install backend dependencies (if separate)
-   cd backend
-   npm install
-   cd ..
    ```
 
 3. **Environment Setup**
@@ -174,31 +190,12 @@ Before you begin, ensure you have the following installed:
 
 4. **Start Development Servers**
    ```bash
-   # Start frontend (port 5173)
+   # Start frontend and backend
    npm run dev
    
-   # Start backend (port 5000) - in separate terminal
-   npm run server
-   
-   # Start n8n workflow (port 5678) - in separate terminal
+   # Start n8n workflow (in separate terminal)
    npx n8n start
    ```
-
-5. **Expose Webhooks (Development)**
-   ```bash
-   # Install ngrok globally
-   npm install -g ngrok
-   
-   # Expose n8n webhook
-   ngrok http 5678
-   ```
-
-### Production Deployment on Replit
-
-1. **Fork this Repl**
-2. **Set Environment Variables** in Replit Secrets
-3. **Configure MongoDB** connection string
-4. **Deploy** using Replit's built-in deployment
 
 ---
 
@@ -208,7 +205,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Navigate to the Demo Page**
    ```
-   http://localhost:5173/demo
+   https://your-repl-name.your-username.repl.co/demo
    ```
 
 2. **Click "Talk to Agent"**
@@ -327,7 +324,7 @@ real-estate-ai-bot/
 │   ├── App.jsx                   # Main app component
 │   ├── index.jsx                 # Entry point
 │   └── vapiClient.js            # Vapi configuration
-├── 📁 backend/                   # Backend server (if separate)
+├── 📁 backend/                   # Backend server
 │   ├── 📁 controllers/
 │   ├── 📁 models/
 │   ├── 📁 routes/
@@ -361,7 +358,7 @@ MONGODB_URI=mongodb://localhost:27017/real-estate-ai
 # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
 
 # n8n Configuration
-N8N_WEBHOOK_URL=https://your-ngrok-url.ngrok.io/webhook
+N8N_WEBHOOK_URL=https://your-repl-url.repl.co/webhook
 N8N_RUNNERS_ENABLED=true
 
 # Server Configuration
@@ -369,7 +366,7 @@ PORT=5000
 NODE_ENV=development
 
 # Frontend URL (for CORS)
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=https://your-repl-url.repl.co
 ```
 
 ### Environment Variables Description
@@ -469,9 +466,6 @@ echo $MONGODB_URI
 
 #### 3. Webhook Not Receiving Data
 ```bash
-# Check ngrok status
-ngrok status
-
 # Verify webhook URL in Vapi dashboard
 curl -X POST your-webhook-url/test
 ```
@@ -497,36 +491,30 @@ LOG_LEVEL=debug
 
 ---
 
-## 🚀 Deployment
+## 🚀 Deployment on Replit
 
-### Replit Deployment (Recommended)
+### Prepare for Deployment
 
-1. **Prepare for Deployment**
-   ```bash
-   # Build the project
-   npm run build
-   
-   # Test production build
-   npm run preview
-   ```
-
-2. **Configure Replit Secrets**
+1. **Configure Replit Secrets**
    - Add all environment variables to Replit Secrets
    - Ensure database URLs are accessible from Replit
+
+2. **Update Configuration**
+   - Ensure server binds to `0.0.0.0:5000`
+   - Configure CORS for production URLs
 
 3. **Deploy**
    - Use Replit's built-in deployment feature
    - Configure custom domain if needed
 
-### Manual Deployment
+### Production Configuration
 
-```bash
-# Build and deploy
-npm run build
-npm run deploy
-
-# Or deploy to specific environment
-npm run deploy:production
+```javascript
+// server.js - Ensure proper binding
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
 ```
 
 ---
@@ -564,8 +552,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Jay Prakash Rana**
 - 📧 Email: [jayrana0909@gmail.com](mailto:jayrana0909@gmail.com)
-- 🐙 GitHub: [@your-github-handle](https://github.com/your-github-handle)
-- 💼 LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/your-profile)
+- 🐙 GitHub: [@jayprakashranapro](https://github.com/jayprakashranapro)
+- 💼 LinkedIn: [Jay Prakash Rana](https://linkedin.com/in/jayprakashranapro)
 
 ### Support
 
@@ -649,7 +637,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ Star this repo if you find it helpful!**
 
-Made with ❤️ by [Jay Prakash Rana](https://github.com/your-github-handle)
+Made with ❤️ by [Jay Prakash Rana](https://github.com/jayprakashranapro)
 
 ![GitHub stars](https://img.shields.io/github/stars/your-username/real-estate-ai-bot?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/your-username/real-estate-ai-bot?style=social)
