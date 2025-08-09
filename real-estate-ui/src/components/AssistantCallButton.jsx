@@ -1,32 +1,44 @@
-import React, { useState, useEffect } from "react";
+// AssistantCallButton.jsx
+import React, { useEffect, useRef, useState } from "react";
 import Vapi from "@vapi-ai/web";
 
+const PUBLIC_KEY = import.meta.env.VITE_VAPI_PUBLIC_KEY;
+const ASSISTANT_ID = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+
 export default function AssistantCallButton() {
-  const [vapi, setVapi] = useState(null);
+  const vapiRef = useRef(null);
   const [callState, setCallState] = useState("idle"); // idle, connecting, connected, error
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [connectionAttempts, setConnectionAttempts] = useState(0);
 
   useEffect(() => {
-    // Cleanup on unmount
+    // cleanup when component unmounts
     return () => {
-      if (vapi) {
-        vapi.stop();
+      if (vapiRef.current) {
+        try { vapiRef.current.stop(); } catch (e) { /* ignore */ }
+        vapiRef.current = null;
       }
     };
-  }, [vapi]);
+  }, []);
 
   async function startAssistant() {
+    setErrorMessage("");
+    if (!PUBLIC_KEY || !ASSISTANT_ID) {
+      setErrorMessage("Missing VAPI keys. Make sure VITE_VAPI_PUBLIC_KEY and VITE_VAPI_ASSISTANT_ID are set.");
+      setCallState("error");
+      return;
+    }
+
     setIsLoading(true);
     setCallState("connecting");
-    setErrorMessage("");
-    
-    try {
-      const client = new Vapi("c97a2bc2-6d9e-40b6-9825-c03e9d2a93e3");
-      setVapi(client);
 
-      // Add event listeners for better state management
+    try {
+      // IMPORTANT: pass the PUBLIC key into the constructor
+      const client = new Vapi(PUBLIC_KEY);
+      vapiRef.current = client;
+
+      // attach listeners BEFORE starting
       client.on("call-start", () => {
         setCallState("connected");
         setIsLoading(false);
@@ -36,36 +48,43 @@ export default function AssistantCallButton() {
       client.on("call-end", () => {
         setCallState("idle");
         setIsLoading(false);
-        setVapi(null);
+        vapiRef.current = null;
         console.log("⏹️ Assistant call ended");
       });
 
-      client.on("error", (error) => {
+      client.on("error", (err) => {
+        console.error("VAPI error event:", err);
         setCallState("error");
         setIsLoading(false);
-        setErrorMessage("Connection failed. Please try again.");
+        setErrorMessage("Connection failed. See console for details.");
         setConnectionAttempts(prev => prev + 1);
-        console.error("❌ Assistant error:", error);
       });
 
-      await client.start("1570aba4-788a-4697-8fcd-5754c2e3e30d");
-      
+      // IMPORTANT: call.start should receive the ASSISTANT ID (not the public key)
+      await client.start(ASSISTANT_ID);
+
     } catch (err) {
+      console.error("❌ Failed to start assistant:", err);
       setCallState("error");
       setIsLoading(false);
-      setErrorMessage("Failed to start conversation. Please try again.");
       setConnectionAttempts(prev => prev + 1);
-      console.error("❌ Failed to start assistant:", err);
+
+      // helpful diagnostics message
+      if (err && err.message && err.message.includes("401")) {
+        setErrorMessage("Unauthorized (401). Check that you passed the public key to `new Vapi()` and the assistant id to `start()`.");
+      } else {
+        setErrorMessage("Failed to start conversation. Check console/network tab for details.");
+      }
     }
   }
 
   async function stopAssistant() {
-    if (vapi) {
+    if (vapiRef.current) {
       setIsLoading(true);
       try {
-        await vapi.stop();
+        await vapiRef.current.stop();
         setCallState("idle");
-        setVapi(null);
+        vapiRef.current = null;
       } catch (err) {
         console.error("Error stopping assistant:", err);
       } finally {

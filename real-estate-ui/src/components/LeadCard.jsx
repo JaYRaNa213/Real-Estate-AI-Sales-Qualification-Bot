@@ -164,6 +164,9 @@ export default function LeadCard({ lead }) {
 
 
 
+
+
+
           <button className="flex-1 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium text-sm">
             View Details
           </button>

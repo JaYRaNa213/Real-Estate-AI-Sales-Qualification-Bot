@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Real Estate Bot</title>
     <link rel="stylesheet" href="/src/index.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.min.js"></script>
+    <!-- index.html (or inside your component via dangerouslySetInnerHTML) -->
+<script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async></script>
+
+<vapi-widget
+  assistant-id="98bd110d-0094-4bfb-aa8c-e925aec8ef8a"
+  public-key="6ca89221-ae27-44ef-b855-0830af6ef8da">
+</vapi-widget>
+
   </head>
   <body>
     <div id="root"></div>

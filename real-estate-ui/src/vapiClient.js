@@ -11,7 +11,8 @@ export async function getVapiInstance() {
   }
 
   vapiInstance = new window.Vapi({
-    apiKey: import.meta.env.VITE_VAPI_API_KEY,
+    apiKey: import.meta.env.
+VITE_VAPI_PUBLIC_KEY,
   });
 
   return vapiInstance;
