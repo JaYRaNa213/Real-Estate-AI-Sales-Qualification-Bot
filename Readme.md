@@ -9,7 +9,7 @@
 
 **An intelligent voice-based AI assistant that automates lead qualification in real estate**
 
-           [Live Demo](https://realestateaiagentjayprakash.vercel.app/) •       
+ [Live Demo](https://realestateaiagentjayprakash.vercel.app/)     
 
 </div>
 
