@@ -116,6 +116,7 @@ Automate the entire lead qualification process with an AI voice agent that:
 graph TD
     A[Customer Call] --> B[Vapi Voice AI]
     B --> C[OpenAI GPT-4]
+    C --> D[Natural Language Processing]
     D --> E[n8n Workflow]
     E --> F[Data Processing]
     F --> G[MongoDB Database]
@@ -124,7 +125,6 @@ graph TD
     I[Real Estate Agent] --> H
     H --> J[Qualified Leads]
     H --> K[Analytics & Reports]
-    
     
     E --> M[Email Notifications]
     E --> N[SMS Alerts]
