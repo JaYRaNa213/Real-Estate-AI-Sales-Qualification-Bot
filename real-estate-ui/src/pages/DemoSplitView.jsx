@@ -18,7 +18,7 @@ export default function DemoSplitView() {
               </svg>
             </div>
             <h2 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              🏠 Customer Property Demo
+               Customer Property Demo
             </h2>
             <p className="text-gray-400 text-sm">Explore premium properties with AI assistance</p>
             <div className="mt-4 flex justify-center space-x-2">
@@ -93,7 +93,7 @@ export default function DemoSplitView() {
                 </svg>
               </div>
               <h2 className="text-3xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                📊 Admin Dashboard
+                Real eState Admin Dashboard
               </h2>
               <p className="text-gray-600 text-sm">Real-time lead management and analytics</p>
               <div className="mt-4 flex justify-center space-x-2">

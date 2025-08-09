@@ -175,3 +175,53 @@ export default function LeadCard({ lead }) {
     </div>
   );
 }
+
+
+
+
+// import { getVapiInstance } from "../vapiClient";
+
+// const LeadCard = ({ lead }) => {
+//   const handleCall = async () => {
+//     if (!lead.phone) {
+//       alert("No phone number found.");
+//       return;
+//     }
+
+//     let formattedCustomer = lead.phone;
+//     if (!formattedCustomer.startsWith("+")) {
+//       formattedCustomer = "+91" + formattedCustomer.replace(/\D/g, "");
+//     }
+
+//     try {
+//       const vapi = await getVapiInstance();
+
+//       vapi.on("call-start", () => console.log("📲 Call started"));
+//       vapi.on("call-end", () => console.log("✅ Call ended"));
+//       vapi.on("error", (error) => console.error("❌ Call error:", error));
+
+//       await vapi.start({
+//         assistant: { id: import.meta.env.VITE_VAPI_ASSISTANT_ID },
+//         phone: { number: "+17752978924" }, // Agent number (calls you first)
+//         customer: { number: formattedCustomer }, // Then calls the customer
+//       });
+//     } catch (err) {
+//       console.error("❌ Error:", err.message);
+//     }
+//   };
+
+//   return (
+//     <div className="p-4 border rounded">
+//       <h3 className="font-bold">{lead.name}</h3>
+//       <p>📞 {lead.phone}</p>
+//       <button
+//         onClick={handleCall}
+//         className="bg-blue-500 text-white px-4 py-2 rounded"
+//       >
+//         Call To Customer
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default LeadCard;

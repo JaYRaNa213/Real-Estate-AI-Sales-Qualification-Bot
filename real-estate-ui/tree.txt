@@ -4,19 +4,26 @@
 ├── index.html
 ├── package-lock.json
 ├── package.json
+├── pnpm-lock.yaml
 ├── public
 ├── src
 │   ├── api.js
 │   ├── App.jsx
 │   ├── components
+│   │   ├── AssistantCallButton.jsx
 │   │   ├── CallCustomer.jsx
 │   │   ├── LeadCard.jsx
-│   │   └── LeadForm.jsx
+│   │   ├── LeadForm.jsx
+│   │   ├── Navbar.jsx
+│   │   └── PropertyCard.jsx
 │   ├── index.css
 │   ├── index.jsx
 │   ├── pages
-│   │   └── Home.jsx
-│   └── tailwind.css
+│   │   ├── DemoSplitView.jsx
+│   │   ├── Home.jsx
+│   │   └── PropertyDemo.jsx
+│   ├── tailwind.css
+│   └── vapiClient.js
 ├── tailwind.config.js
 ├── tree.js
 ├── tree.txt

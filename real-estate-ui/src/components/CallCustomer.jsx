@@ -1,42 +1,60 @@
 // src/components/CallCustomer.jsx
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getVapiInstance } from "../vapiClient";
 
 const CallCustomer = ({ phone }) => {
+  const [status, setStatus] = useState("idle");
+
   useEffect(() => {
-  if (!phone) return;
+    if (!phone) return;
+    let vapi;
 
-  let vapi;
+    const startCall = async () => {
+      setStatus("dialing");
 
-  const startCall = async () => {
-    try {
-      vapi = await getVapiInstance();
+      try {
+        vapi = await getVapiInstance();
 
-      vapi.on("call-start", () => console.log("📲 Call started"));
-      vapi.on("call-end", () => console.log("✅ Call ended"));
-      vapi.on("error", (error) => console.error("❌ Call error:", error));
+        vapi.on("call-start", () => {
+          console.log("📲 Call started");
+          setStatus("in-progress");
+        });
 
-      vapi.start({
-        assistant: { id: import.meta.env.VITE_VAPI_ASSISTANT_ID },
-        phone: { number: phone },
-      });
-    } catch (err) {
-      console.error("❌ Vapi error:", err.message);
-    }
-  };
+        vapi.on("call-end", () => {
+          console.log("✅ Call ended");
+          setStatus("ended");
+        });
 
-  startCall();
+        vapi.on("error", (error) => {
+          console.error("❌ Call error:", error);
+          setStatus("error");
+        });
 
-  return () => {
-    if (vapi) vapi.hangUp();
-  };
-}, [phone]);
+        await vapi.start({
+          assistant: { id: import.meta.env.VITE_VAPI_ASSISTANT_ID },
+          phone: { number: phone },
+        });
+      } catch (err) {
+        console.error("❌ Vapi error:", err.message);
+        setStatus("error");
+      }
+    };
 
+    startCall();
+
+    return () => {
+      if (vapi) vapi.hangUp();
+    };
+  }, [phone]);
 
   return (
     <div className="p-4 border rounded">
-      <p>📞 Calling customer at <strong>{phone}</strong>...</p>
+      <p>
+        {status === "dialing" && `📞 Dialing ${phone}...`}
+        {status === "in-progress" && `🔊 On call with ${phone}`}
+        {status === "ended" && `✅ Call ended`}
+        {status === "error" && `❌ Call failed`}
+      </p>
     </div>
   );
 };
