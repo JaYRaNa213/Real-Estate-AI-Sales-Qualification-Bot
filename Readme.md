@@ -116,7 +116,6 @@ Automate the entire lead qualification process with an AI voice agent that:
 graph TD
     A[Customer Call] --> B[Vapi Voice AI]
     B --> C[OpenAI GPT-4]
-    
     D --> E[n8n Workflow]
     E --> F[Data Processing]
     F --> G[MongoDB Database]
