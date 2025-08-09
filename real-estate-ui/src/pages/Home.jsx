@@ -17,24 +17,25 @@ export default function Home() {
     unqualified: 0,
     thisMonth: 0,
   });
+useEffect(() => {
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api"; // fallback for dev
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/leads")
-      .then((res) => {
-        const data = res.data;
-        setLeads(data);
+  axios
+    .get(`${apiUrl}/leads`)
+    .then((res) => {
+      const data = res.data;
+      setLeads(data);
 
-        const qualified = data.filter((lead) => lead.qualified).length;
-        const unqualified = data.filter((lead) => !lead.qualified).length;
-        const thisMonth = data.filter((lead) => {
-          const leadDate = new Date(lead.createdAt);
-          const now = new Date();
-          return (
-            leadDate.getMonth() === now.getMonth() &&
-            leadDate.getFullYear() === now.getFullYear()
-          );
-        }).length;
+      const qualified = data.filter((lead) => lead.qualified).length;
+      const unqualified = data.filter((lead) => !lead.qualified).length;
+      const thisMonth = data.filter((lead) => {
+        const leadDate = new Date(lead.createdAt);
+        const now = new Date();
+        return (
+          leadDate.getMonth() === now.getMonth() &&
+          leadDate.getFullYear() === now.getFullYear()
+        );
+      }).length;
 
         setStats({
           total: data.length,
