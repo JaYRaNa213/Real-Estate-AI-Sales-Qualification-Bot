@@ -14,9 +14,9 @@
 </div>
 
 ---
-<img src="./images/i.img/user_and_admin.png" alt="User and Admin" width="500" />
+<img src="./images/i.img/user_and_admin.png" alt="User and Admin" width="900" />
 <br />
-<img src="./images/i.img/n8n_workflow.png" alt="n8n Workflow" width="500" />
+<img src="./images/i.img/n8n_workflow.png" alt="n8n Workflow" width="900" />
 <br />
 
 ## 📋 Table of Contents
