@@ -1,22 +1,23 @@
-#  Real Estate AI  Qualification Bot 🤖
+# 🏡 Real Estate AI Qualification Bot 🤖
 
 An intelligent, voice-based AI assistant designed to automate lead qualification in real estate.  
-Built using **Vapi**, **OpenAI**, and **n8n** with MongoDB backend for structured lead storage. This solution reduces repetitive agent calls, speeds up lead processing, and improves conversion rates.
+Built with **Vapi**, **OpenAI**, and **n8n**, and backed by MongoDB for structured lead storage.  
+This solution reduces repetitive agent calls, accelerates lead processing, and improves conversion rates.
 
 ---
 
 ## 📌 Problem Statement
 
-Real estate agents spend excessive time answering repetitive qualification questions (budget, location, property type, etc), leading to inefficiencies and missed opportunities.
+Real estate agents spend excessive time answering repetitive qualification questions (budget, location, property type, etc), leading to inefficiencies and lost opportunities.
 
 ### Objective
 
-Automate the **sales qualification process** by building an AI voice agent that:
+Automate the **sales qualification process** with an AI voice agent that:
 
-- Engages leads through phone conversations
-- Asks dynamic, qualifying questions intelligently
-- Translates spoken responses into structured data
-- Saves leads in database or forwards to CRM systems
+- Engages leads through dynamic phone conversations  
+- Asks qualifying questions intelligently  
+- Converts spoken answers into structured data  
+- Saves leads to a database or forwards them to CRM systems  
 - Provides automatic qualification decisions (`qualified: true/false`)
 
 ---
@@ -26,8 +27,8 @@ Automate the **sales qualification process** by building an AI voice agent that:
 A fully automated AI voice qualification system combining:
 
 - **Vapi** for real-time voice call interaction  
-- **OpenAI GPT** for dynamic natural language understanding & generation  
-- **n8n** workflow automation to process data, parse responses, save leads  
+- **OpenAI GPT** for dynamic natural language understanding and generation  
+- **n8n** workflow automation for processing data, parsing responses, and saving leads  
 - **MongoDB** for storing qualified lead information  
 - **ngrok** to expose local webhooks during development/testing  
 
@@ -35,42 +36,34 @@ A fully automated AI voice qualification system combining:
 
 ## 🧠 Architecture Diagram
 
-
-
+```mermaid
 graph TD
   A[Vapi Voice Call] --> B{OpenAI NLP Engine}
   B --> C[n8n Webhook POST]
   C --> D[Function Node: Budget Parsing & Qualification]
   D --> E[MongoDB Save Lead Data]
   D --> F[Response Node: Return Qualification Status]
-  
-🧱 Key Features
-Conversational AI through voice calls
+🖼️ Screenshots / Demo Images
+Website Interface	n8n Workflow	AI Qualification Call UI
 
-Budget and location parsing (e.g., "50 lakhs" → 5,000,000)
+(Replace these placeholder URLs with your actual images)
 
-Intelligent lead qualification logic
-
-Automatic lead storage in MongoDB
-
-Easy workflow customization through n8n UI
-
-⚙️ Setup & Running Locally
-Clone repo:
+⚙️ Setup & Run Locally
+Clone the repository
 
 bash
 Copy
 Edit
 git clone https://github.com/your-username/real-estate-ai-bot.git
 cd real-estate-ai-bot
-Install & start n8n:
+Install and start n8n
 
 bash
 Copy
 Edit
 npm install -g n8n
 n8n start
-Expose local webhook with ngrok:
+Expose local webhook using ngrok
 
 bash
 Copy
@@ -78,13 +71,14 @@ Edit
 ngrok http 5678
 Use the HTTPS ngrok URL in your Vapi configuration.
 
-Ensure MongoDB is running locally or use cloud instance.
+Ensure MongoDB is running locally or use a cloud instance
 
 Create n8n workflow:
-Webhook → Function (budget parse + qualification) → MongoDB → Response
+
+Webhook → Function (budget parsing & qualification) → MongoDB → Response
 
 📁 Project Folder Structure
-Frontend React App
+Frontend (React)
 pgsql
 Copy
 Edit
@@ -146,12 +140,13 @@ real-estate-bot
 ├── tree.js
 └── tree.txt
 📄 Hackathon & Submission Details
-Swafinix AI Hackathon 2025
-Category: Real Estate – AI Sales Qualification Bot
-Participant: Jay Prakash Rana
-Email: jayrana0909@gmail.com
-GitHub: [your-github-handle]
-Status: Working Prototype Complete
+Detail	Information
+Hackathon	Swafinix AI Hackathon 2025
+Category	Real Estate – AI Sales Qualification Bot
+Participant	Jay Prakash Rana
+Email	jayrana0909@gmail.com
+GitHub	[your-github-handle]
+Status	Working Prototype Complete
 
 Important Dates
 Event	Date & Time (IST)
@@ -168,11 +163,11 @@ Source code / workflow design (GitHub repo or ZIP)
 Documentation covering problem, tech stack, and solution workflow
 
 🏆 Why Participate?
-Hands-on experience with real-world AI automation tools
+Gain hands-on experience with real-world AI automation tools
 
 Network with industry experts and innovators
 
-Opportunity for PPO at 12 LPA with Swafinix Technologies Pvt. Ltd.
+Get a chance for PPO at 12 LPA with Swafinix Technologies Pvt. Ltd.
 
 Prizes: MacBook, iPhone, Apple Watch, Cash, and more!
 
@@ -182,25 +177,27 @@ Email: jayrana0909@gmail.com
 GitHub: [your-github-handle]
 
 📺 Demo Video
-(Add your demo video link here)
+Visit the live demo here:
+👉 https://realestateaiagentjayprakash.vercel.app/
+
 Showcasing:
 
 Voice call interaction with Vapi
 
 AI-driven qualification conversation
 
-Lead data saved in MongoDB in real-time
+Lead data saved to MongoDB in real-time
 
 Live n8n workflow visualization
 
 ⚠️ Notes & Recommendations
-Update environment variables for n8n per latest deprecations:
+Update environment variables for n8n as per latest deprecations:
 
 Set N8N_RUNNERS_ENABLED=true
 
 Remove deprecated EXECUTIONS_PROCESS variable
 
-Use .env.example for environment variable samples.
+Use .env.example for environment variable samples
 
 📚 References
 Vapi Documentation
@@ -214,15 +211,7 @@ MongoDB Documentation
 Good luck and happy coding! 🚀
 Jay Prakash Rana
 
-(This README was generated and formatted professionally for hackathon submission and project clarity.)
-
-yaml
-Copy
-Edit
-
 ---
-
-If you want, I can also help you generate a PDF or add any screenshots or badges! Just say the word.
 
 
 
