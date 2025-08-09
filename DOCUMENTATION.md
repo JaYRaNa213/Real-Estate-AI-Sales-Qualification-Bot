@@ -1,5 +1,5 @@
 
-# 🏡 Real Estate AI Agent DOCUMENTATION
+#  Real Estate AI Agent DOCUMENTATION
 ## Technical Documentation
 
 ---
