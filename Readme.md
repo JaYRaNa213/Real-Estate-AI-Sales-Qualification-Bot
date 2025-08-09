@@ -35,27 +35,40 @@
 - [License](#-license)
 - [Contact](#-contact)
 
+
+
+
 ---
+ ## 🚨 Problem Statement
+Real estate agents today face several critical challenges:
 
-## 🚨 Problem Statement
+Wasted Time: Up to 60-70% of their time is spent engaging with leads who are not ready or qualified to buy.
 
-Real estate agents face significant challenges:
+Repetitive Tasks: Agents must repeatedly ask the same basic qualifying questions, which drains productivity.
 
-- **Time Waste**: 60-70% of time spent on unqualified leads
-- **Repetitive Tasks**: Asking the same qualification questions repeatedly
-- **Missed Opportunities**: Inability to respond to leads 24/7
-- **Manual Process**: Converting conversations to structured data manually
-- **Inefficient Scaling**: Limited by human availability
+Missed Opportunities: Without 24/7 availability, many potential leads slip away when no one is available to respond.
 
-### Our Solution
+Manual Data Handling: Agents manually convert conversations into structured data, increasing the chance of errors and delays.
 
-Automate the entire lead qualification process with an AI voice agent that:
+Limited Scalability: Human availability restricts how many leads can be handled simultaneously, capping growth.
 
-✅ Engages leads through natural phone conversations  
-✅ Asks intelligent qualifying questions  
-✅ Converts speech to structured data automatically  
-✅ Provides instant qualification decisions  
-✅ Works 24/7 without human intervention  
+Additionally, many customers visiting real estate websites find no live person available to chat, which leads to frustration and lost business.
+
+### 💡 Our Solution
+Our AI-powered voice agent transforms the lead qualification process by:
+
+Engaging Customers Naturally: The AI holds real-time, natural phone conversations with potential buyers, just like a human agent.
+
+Asking Smart Questions: It intelligently gathers all necessary qualification details without boring the lead with repetitive or irrelevant queries.
+
+Automating Data Capture: Spoken answers are converted instantly into structured data, eliminating manual entry and mistakes.
+
+Instant Qualification: Leads are automatically scored and tagged as qualified or unqualified based on preset criteria.
+
+24/7 Availability: The AI works around the clock, never missing a lead regardless of time or volume.
+
+Seamless Admin Integration: Qualified leads are sent directly to the admin dashboard, exported to Excel, and notifications are emailed to administrators in real time.
+
 
 ---
 
@@ -619,23 +632,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📈 Roadmap
 
-### Phase 1 (Current)
+### Phase  (Current)
 - ✅ Voice call qualification
 - ✅ Basic lead management
 - ✅ MongoDB integration
 - ✅ n8n workflows
 
-### Phase 2 (Next)
-- 🔄 Advanced analytics dashboard
-- 🔄 Multi-language support
-- 🔄 CRM integrations (Salesforce, HubSpot)
-- 🔄 WhatsApp integration
-
-### Phase 3 (Future)
-- 📅 Calendar scheduling
-- 📊 Predictive analytics
-- 🤖 Advanced AI features
-- 📱 Mobile application
 
 ---
 
