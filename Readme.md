@@ -126,6 +126,7 @@ graph TD
     H --> J[Qualified Leads]
     H --> K[Analytics & Reports]
     
+    E --> L[CRM Integration]
     E --> M[Email Notifications]
     E --> N[SMS Alerts]
 ```
