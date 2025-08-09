@@ -148,12 +148,12 @@ export default function Home() {
                 />
               </div>
               
-        <button
+        {/* <button
           onClick={handleStartAssistantCall}
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
         >
           Call Assistant
-        </button>
+        </button> */}
               <button
   onClick={handleDownloadCSV}
   className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"
