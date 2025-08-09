@@ -152,7 +152,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/real-estate-ai-bot.git
+   git clone https://github.com/JaYRaNa213/Real-Estate-AI-Sales-Qualification-Bot
    cd real-estate-ai-bot
    ```
 
@@ -162,7 +162,7 @@ Before you begin, ensure you have the following installed:
    npm install
    
    # Install backend dependencies (if separate)
-   cd backend
+   cd real-estate-backend
    npm install
    cd ..
    ```
@@ -171,13 +171,11 @@ Before you begin, ensure you have the following installed:
    ```bash
    # Copy environment template
    cp .env.example .env
-   
-   # Edit environment variables
-   nano .env
    ```
 
 4. **Start Development Servers**
    ```bash
+   npm run css:watch
    # Start frontend (port 5173)
    npm run dev
    
@@ -185,7 +183,7 @@ Before you begin, ensure you have the following installed:
    npm run server
    
    # Start n8n workflow (port 5678) - in separate terminal
-   npx n8n start
+   n8n
    ```
 
 5. **Expose Webhooks (Development)**
@@ -194,15 +192,15 @@ Before you begin, ensure you have the following installed:
    npm install -g ngrok
    
    # Expose n8n webhook
-   ngrok http 5678
+   npx ngrok http 5678
    ```
 
 ### Production Deployment on Replit
 
 1. **Fork this Repl**
-2. **Set Environment Variables** in Replit Secrets
+2. **Set Environment Variables** 
 3. **Configure MongoDB** connection string
-4. **Deploy** using Replit's built-in deployment
+4. **Deploy** 
 
 ---
 
@@ -252,9 +250,8 @@ Get all leads with optional filtering
 
 **Query Parameters:**
 - `status` - Filter by qualification status
-- `search` - Search by name, phone, or email
-- `limit` - Number of results per page
-- `page` - Page number
+- `List` - Search by name, phone, or email
+
 
 **Response:**
 ```json
@@ -273,11 +270,6 @@ Get all leads with optional filtering
       "createdAt": "2024-01-15T10:30:00Z"
     }
   ],
-  "pagination": {
-    "total": 150,
-    "page": 1,
-    "pages": 15
-  }
 }
 ```
 
@@ -295,15 +287,13 @@ POST /api/leads
   "email": "jane@example.com",
   "budget": "300000-500000",
   "location": "Bangalore",
-  "propertyType": "house",
-  "timeline": "3-6 months"
 }
 ```
 
 #### Webhook Endpoint (n8n)
 
 ```http
-POST /webhook/vapi-qualification
+POST /webhook/qualified
 ```
 
 Receives data from Vapi calls and processes lead qualification.
@@ -653,10 +643,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ Star this repo if you find it helpful!**
 
-Made with ❤️ by [Jay Prakash Rana](https://github.com/your-github-handle)
+Made with ❤️ by [Jay Prakash Rana](https://github.com/JaYRaNa213)
 
-![GitHub stars](https://img.shields.io/github/stars/your-username/real-estate-ai-bot?style=social)
-![GitHub forks](https://img.shields.io/github/forks/your-username/real-estate-ai-bot?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/your-username/real-estate-ai-bot?style=social)
 
 </div>
